@@ -16,6 +16,14 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 
+	public User getUser(String name) {
+		Optional<User> user = userRepository.findByName(name);
+		if (!user.isPresent()) {
+			throw new RuntimeException("Usuário não cadastrado.");
+		}
+		return user.get();
+	}
+
 	public User getUser(String name, String password) {
 		Optional<User> user = userRepository.findByName(name);
 		if (!user.isPresent()) {
