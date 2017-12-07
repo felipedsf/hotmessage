@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+<title>Hotmessage</title>
+
+<link
+	href="http://cdn.jsdelivr.net/webjars/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+	th:href="@{/webjars/bootstrap/4.0.0-beta.2/css/bootstrap.min.css}"
+	rel="stylesheet" media="screen" type="text/css" />
+
+
+<link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}" />
+
+</head>
+
+<body>
+
+	<div id="chat-page">
+		<div class="chat-container">
+			<input type="hidden" id="name" th:value="${user.getName()}" />
+			<div class="chat-header">
+				<h2>Hotmessage</h2>
+			</div>
+			<div class="connecting">Connecting...</div>
+			<ul id="messageArea">
+
+			</ul>
+			<form id="messageForm" name="messageForm">
+				<div class="form-group">
+					<div class="input-group clearfix">
+						<input type="text" id="message" placeholder="Type a message..."
+							autocomplete="off" class="form-control" />
+						<button type="submit" class="primary">Send</button>
+					</div>
+				</div>
+			</form>
+
+			<a href="/logout" class="btn btn-warning form-control">Logout</a>
+		</div>
+
+		<script src="/js/sockjs.min.js" th:href="@{/js/sockjs.min.js}"></script>
+		<script src="/js/stomp.min.js" th:href="@{/js/stomp.min.js}"></script>
+		<script src="/js/main.js" th:href="@{/js/main.js}"></script>
+		<script type="text/javascript">
+			window.addEventListener("load", function(event) {
+				connect(event);
+			});
+		</script>
+	</div>
+</body>
+</html>
+

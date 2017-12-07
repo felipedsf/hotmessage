@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -31,8 +32,8 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import rocks.lipe.hotmessage.domain.ChatMessage;
 import rocks.lipe.hotmessage.domain.ChatMessageDto;
-import rocks.lipe.hotmessage.domain.User;
 
+@Profile("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ChatControllerTest {
@@ -85,7 +86,7 @@ public class ChatControllerTest {
 	@Test
 	public void addUserToSocket() throws Exception {
 		stompSession.subscribe("/channel/global/add", new CreateStompFrameHandler());
-		stompSession.send("/app/global/add", new ChatMessage("Mensagem de teste", createSender("paula")));
+		stompSession.send("/app/global/add", new ChatMessage("Mensagem de teste", "paula"));
 
 		ChatMessage message = completableFuture.get();
 		assertThat(message, notNullValue());
@@ -98,10 +99,6 @@ public class ChatControllerTest {
 
 		ChatMessage message = completableFuture.get();
 		assertThat(message, notNullValue());
-	}
-
-	private User createSender(String name) {
-		return new User(name, "123");
 	}
 
 	private List<Transport> createTransports() {

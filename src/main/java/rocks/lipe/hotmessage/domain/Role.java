@@ -1,12 +1,13 @@
 package rocks.lipe.hotmessage.domain;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,22 +19,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 
 @Entity
-public class ChatMessage implements Serializable {
+public class Role implements Serializable {
 
-	private static final long serialVersionUID = 3436724970222894074L;
+	private static final long serialVersionUID = 3124987116290710209L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@NonNull
-	private String content;
+	private String description;
 
-	@NonNull
-	private String sender;
-
-	private String reciver;
-
-	private Date sendDate = new Date();
-
+	@OneToMany(mappedBy = "role")
+	private Set<User> users;
 }

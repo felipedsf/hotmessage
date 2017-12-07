@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Bootstrap core CSS -->
+<link
+	href="http://cdn.jsdelivr.net/webjars/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+	th:href="@{/webjars/bootstrap/4.0.0-beta.2/css/bootstrap.min.css}"
+	rel="stylesheet" media="screen" type="text/css"/>
+
+<link href="../css/jumbotron.css" th:href="@{/css/jumbotron.css}"
+	rel="stylesheet" media="screen" type="text/css"/>
+<link href="../css/signin.css" th:href="@{/css/signin.css}"
+	rel="stylesheet" media="screen" type="text/css"/>
+
+<title>Hotmessage</title>
+</head>
+<body>
+
+	<div class="container">
+		<form class="form-signin" id="loginForm" th:object="${user}"
+			th:method="post">
+			<h2 class="form-signin-heading text-center">Login</h2>
+
+			<label for="inputLogin" class="sr-only">Login</label> <input
+				type="text" class="form-control" placeholder="Login"
+				th:field="*{name}" /> <label for="inputPassword" class="sr-only">Password</label>
+			<input type="password" class="form-control" placeholder="Password"
+				th:field="*{password}" />
+
+			<button class="btn btn-lg btn-primary btn-block" form="loginForm"
+				type="submit">Sign in</button>
+			<a href="/register" class="btn form-control" th:href="@{/register}">Register</a>
+		</form>
+
+	</div>
+
+</body>
+</html>
