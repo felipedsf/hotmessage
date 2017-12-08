@@ -5,7 +5,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
 
 import lombok.extern.slf4j.Slf4j;
 import rocks.lipe.hotmessage.domain.ChatMessage;
@@ -13,7 +13,7 @@ import rocks.lipe.hotmessage.domain.ChatMessageDto;
 import rocks.lipe.hotmessage.repository.ChatMessageRepository;
 
 @Slf4j
-@RestController
+@Controller
 public class ChatController {
 
 	private ChatMessageRepository chatMessageRepository;
