@@ -8,12 +8,16 @@ var connectingElement = document.querySelector('.connecting');
 
 var stompClient = null;
 var username = null;
+var receiver = null;
 
 var colors = [ '#2196F3', '#32c787', '#00BCD4', '#ff5652', '#ffc107',
 		'#ff85af', '#FF9800', '#39bbb0' ];
 
 function connect(event) {
+	
+	receiver = document.querySelector('#receiver').value.trim();
 	username = document.querySelector('#name').value.trim();
+	
 	if (username) {
 
 		var socket = new SockJS('/chat');
@@ -32,6 +36,18 @@ function onConnected() {
 		type : 'JOIN'
 	}))
 
+	username = document.querySelector('#name').value.trim();
+	if (username) {
+		stompClient.subscribe('/channel/' + username + '/send',
+				onMessageReceived);
+
+		stompClient.send("/app/channel/" + username + "/send", {}, JSON
+				.stringify({
+					sender : username,
+					type : 'JOIN'
+				}))
+	}
+
 	connectingElement.classList.add('hidden');
 }
 
@@ -42,8 +58,21 @@ function onError(error) {
 
 function sendMessage(event) {
 	var messageContent = messageInput.value.trim();
+	receiver = document.querySelector('#receiver').value.trim();
 
-	if (messageContent && stompClient) {
+	if (messageContent && stompClient && receiver) {
+
+		var chatMessage = {
+			sender : username,
+			content : messageInput.value,
+			type : 'CHAT'
+		};
+		stompClient.send("/app/" + receiver + "/send", {}, JSON
+				.stringify(chatMessage));
+		stompClient.send("/app/" + username + "/send", {}, JSON
+				.stringify(chatMessage));
+		messageInput.value = '';
+	} else if (messageContent && stompClient) {
 		var chatMessage = {
 			sender : username,
 			content : messageInput.value,
@@ -52,6 +81,7 @@ function sendMessage(event) {
 		stompClient.send("/app/global", {}, JSON.stringify(chatMessage));
 		messageInput.value = '';
 	}
+
 	event.preventDefault();
 }
 

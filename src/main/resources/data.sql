@@ -1,3 +1,3 @@
-INSERT INTO role (description) VALUES ('user');
-INSERT INTO role (description) VALUES ('admin');
+INSERT INTO role (id, description) VALUES (2, 'user');
+INSERT INTO role (id, description) VALUES (1, 'admin');
 

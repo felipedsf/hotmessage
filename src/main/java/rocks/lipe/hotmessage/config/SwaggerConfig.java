@@ -2,6 +2,7 @@ package rocks.lipe.hotmessage.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RestController;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -16,7 +17,8 @@ public class SwaggerConfig {
 	@Bean
 	public Docket petApi() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("rocks.lipe.hotmessage.controller"))
+				.apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
+				// basePackage("rocks.lipe.hotmessage.controller"))
 				.paths(PathSelectors.any()).build().pathMapping("/");
 	}
 }

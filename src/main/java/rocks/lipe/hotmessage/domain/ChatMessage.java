@@ -26,14 +26,20 @@ public class ChatMessage implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@NonNull
 	private String content;
 
 	@NonNull
 	private String sender;
 
-	private String reciver;
+	private String receiver;
+
+	private boolean read;
 
 	private Date sendDate = new Date();
+
+	public ChatMessage(String content, String sender) {
+		this.content = content;
+		this.sender = sender;
+	}
 
 }

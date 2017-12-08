@@ -10,6 +10,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Profile({ "dev", "default" })
@@ -25,10 +28,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests().antMatchers("/register").permitAll().anyRequest().authenticated()
-				.and().formLogin().loginPage("/login").permitAll().usernameParameter("name")
-				.passwordParameter("password").and().logout().logoutUrl("/logout").logoutSuccessUrl("/")
-				.invalidateHttpSession(true).and().logout().permitAll();
+		// @formatter:off
+		http.csrf().disable()
+				.authorizeRequests().antMatchers("/register").permitAll()
+				.anyRequest().authenticated()
+			.and()
+				.formLogin().loginPage("/login")
+				.usernameParameter("name")
+				.passwordParameter("password")
+				.permitAll()
+			.and()
+				.logout()
+				.logoutUrl("/logout")
+				.logoutSuccessUrl("/")
+				.invalidateHttpSession(true)
+				.permitAll()
+			.and()
+				.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+		// @formatter:on
+
 	}
 
 	@Override
@@ -47,5 +66,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		authProvider.setUserDetailsService(userDetail);
 		return authProvider;
 	}
+
+	@Bean
+    public SessionRegistry sessionRegistry() {
+        SessionRegistry sessionRegistry = new SessionRegistryImpl();
+        return sessionRegistry;
+    }
 
 }

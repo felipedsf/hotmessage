@@ -1,11 +1,14 @@
 package rocks.lipe.hotmessage.controller;
 
+import java.util.stream.Collectors;
+
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import io.swagger.annotations.ApiOperation;
@@ -25,12 +28,43 @@ public class UserController {
 	public String index(Model model, Authentication authentication) {
 		if (authentication != null && authentication.isAuthenticated()) {
 			User user = userService.getUserByName(authentication.getName());
+			userService.setLogged(user);
 			model.addAttribute("user", user);
 			model.addAttribute("username", user.getName());
+			model.addAttribute("receiver", null);
 		} else {
 			return "redirect:/login";
 		}
 		return "index";
+	}
+
+	@GetMapping("/u/{receiver}")
+	public String chat(@PathVariable("receiver") String receiver, Model model, Authentication authentication) {
+		if (authentication != null && authentication.isAuthenticated()) {
+			User user = userService.getUserByName(authentication.getName());
+			userService.setLogged(user);
+			model.addAttribute("user", user);
+			model.addAttribute("username", user.getName());
+			model.addAttribute("receiver", receiver);
+		} else {
+			return "redirect:/login";
+		}
+		return "index";
+	}
+
+	@GetMapping("/users")
+	public String loggedUsers(Model model, Authentication authentication) {
+		model.addAttribute("allUsers",
+				userService.getAllUsers().stream().filter(user -> !user.getName().equals(authentication.getName()))
+						.map(user -> user.getName()).collect(Collectors.toList()));
+		return "users";
+	}
+
+	@GetMapping("/logout")
+	public String logout(Authentication authentication) {
+		User user = userService.getUserByName(authentication.getName());
+		userService.setLogged(user);
+		return "redirect:/";
 	}
 
 	@GetMapping("/login")

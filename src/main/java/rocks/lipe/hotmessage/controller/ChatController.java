@@ -5,15 +5,22 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import rocks.lipe.hotmessage.domain.ChatMessage;
 import rocks.lipe.hotmessage.domain.ChatMessageDto;
+import rocks.lipe.hotmessage.repository.ChatMessageRepository;
 
 @Slf4j
-@Controller
+@RestController
 public class ChatController {
+
+	private ChatMessageRepository chatMessageRepository;
+
+	public ChatController(ChatMessageRepository chatMessageRepository) {
+		this.chatMessageRepository = chatMessageRepository;
+	}
 
 	@MessageMapping("/global")
 	@SendTo("/channel/global")
@@ -29,14 +36,15 @@ public class ChatController {
 		return message;
 	}
 
-	@MessageMapping("/{reciver}/send")
-	@SendTo("/channel/{reciver}/send")
-	public ChatMessage sendMessage(@Payload ChatMessageDto message, @DestinationVariable("reciver") String reciver) {
+	@MessageMapping("/{receiver}/send")
+	@SendTo("/channel/{receiver}/send")
+	public ChatMessage sendMessage(@Payload ChatMessageDto message, @DestinationVariable("receiver") String receiver) {
 		ChatMessage chatMessage = new ChatMessage();
-		chatMessage.setReciver(reciver);
+		chatMessage.setReceiver(receiver);
 		chatMessage.setSender(message.getSender());
 		chatMessage.setContent(message.getContent());
-		log.info("/channel/{reciver}: " + chatMessage);
+		log.info("/channel/{receiver}: " + chatMessage);
+		chatMessageRepository.save(chatMessage);
 		return chatMessage;
 	}
 

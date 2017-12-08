@@ -35,6 +35,8 @@ public class User implements Serializable {
 
 	@NonNull
 	private String password;
+	
+	private boolean logged = false;
 
 	@ManyToOne
 	@JoinColumn(name = "user_role", nullable = false)

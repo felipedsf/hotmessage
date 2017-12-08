@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+<title>Hotmessage</title>
+
+<link
+	href="http://cdn.jsdelivr.net/webjars/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+	th:href="@{/webjars/bootstrap/4.0.0-beta.2/css/bootstrap.min.css}"
+	rel="stylesheet" media="screen" type="text/css" />
+
+
+<link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}" />
+
+</head>
+
+<body>
+
+	<div id="chat-page">
+		<div class="chat-container">
+			<div class="chat-header">
+				<h2>Hotmessage</h2>
+			</div>
+
+			<ul>
+				<li th:each="user : ${allUsers}" >
+				 	<a th:href="@{/u/} + ${user}" th:text="${user}">User</a>
+				</li>
+			</ul>
+
+			<a th:href="@{/}" class="btn form-control">Chat</a> 
+			<a th:href="@{/logout}" class="btn btn-warning form-control">Logout</a>
+		</div>
+	</div>
+</body>
+</html>
+
