@@ -17,7 +17,7 @@ public class SwaggerConfig {
 	@Bean
 	public Docket petApi() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.withClassAnnotation(Controller.class))
+				.apis(RequestHandlerSelectors.basePackage("rocks.lipe.hotmessage.controller"))
 				.paths(PathSelectors.any()).build().pathMapping("/");
 	}
 }
